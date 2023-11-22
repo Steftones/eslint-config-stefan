@@ -1,2 +1,2 @@
 # eslint-config-stefan
-Eslint config
+Eslint config 
