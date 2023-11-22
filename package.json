@@ -1,0 +1,29 @@
+{
+  "name": "eslint-config-stefan",
+  "version": "1.0.0",
+  "description": "Linting rules and git hooks",
+  "main": "index.js",
+  "scripts": {
+    "postinstall": "cd ../.. && npx husky install && cd ./node_modules/eslint-config-stefan && node addHusky.js && node addScripts.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint --ext .jsx --ext .js .",
+    "lint:fix": "eslint --ext .jsx --ext .js . --fix"
+  },
+  "author": "Stefan Sokolowski",
+  "license": "ISC",
+  "dependencies": {
+    "@commitlint/cli": "^18.4.1",
+    "@commitlint/config-conventional": "^18.4.0",
+    "fs-extra": "^11.1.1",
+    "eslint": "^8.53.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^8.0.3"
+  },
+  "devDependencies": {
+    "husky": "^8.0.0"
+  }
+}
