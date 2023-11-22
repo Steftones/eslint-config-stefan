@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-stefan",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Linting rules and git hooks",
   "main": "index.js",
   "scripts": {
