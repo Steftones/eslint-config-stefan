@@ -12,6 +12,10 @@ https://github.com/conventional-changelog/commitlint/#what-is-commitlint
 module.exports = {
   extends: ['@commitlint/config-conventional'],
   rules: {
-    'scope-empty': [2, 'never', ['pascal-case', 'camel-case', 'kebab-case']],
+    'scope-empty': [
+      2,
+      'never',
+      ['pascal-case', 'camel-case', 'kebab-case'],
+    ],
   },
 };

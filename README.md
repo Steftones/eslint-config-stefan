@@ -2,6 +2,7 @@
 
 * React linting rules and git hooks
 * Rules are based around modern standards and airbnb's rules
+* Works with TypeScript
 
 
 ## Install
