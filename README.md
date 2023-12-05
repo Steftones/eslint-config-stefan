@@ -25,5 +25,5 @@ npm run prepare
 ## Todo/Issues
 * Prettier support
 * Jest support
-* If your React app `package.json` is not in the same directory as your `.git` folder you may need to copy your `tsconfig.json`, place it in the `.git` folder directory and restart your IDE to get full TypeScript support
+* If your React app `package.json` is not in the same directory as your `.git` folder you may need to copy your `tsconfig.json`, place it at the top level directory and restart your IDE to get full TypeScript support
 * May not work with `tsc -w`
