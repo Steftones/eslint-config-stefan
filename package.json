@@ -1,11 +1,11 @@
 {
   "name": "eslint-config-stefan",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "Linting rules and git hooks",
   "scripts": {
-    "postinstall": "cd ../.. && npx husky-init && npx husky install && cd ./node_modules/eslint-config-stefan && node add.js",
+    "postinstall": "node installScript.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint .",
+    "lint": "eslint . --color",
     "lint:fix": "eslint . --fix"
   },
   "author": "Stefan Sokolowski",
@@ -15,7 +15,10 @@
     "@babel/eslint-parser": "^7.23.3",
     "@babel/preset-env": "^7.23.5",
     "@babel/preset-react": "^7.23.3",
+    "@commitlint/cli": "^18.4.1",
+    "@commitlint/config-conventional": "^18.4.0",
     "@typescript-eslint/parser": "^6.13.1",
+    "async": "^3.2.5",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.1.0",
     "eslint-plugin-import": "^2.29.0",
@@ -23,14 +26,11 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "fs-extra": "^11.1.1",
-    "yargs": "^17.7.2"
+    "husky": "^8.0.3"
   },
   "devDependencies": {
-    "@commitlint/cli": "^18.4.1",
-    "@commitlint/config-conventional": "^18.4.0",
-    "husky": "^8.0.3",
     "eslint": "^8.53.0"
   },
-  "bin": "configCopy.js",
+  "bin": "bin.js",
   "main": "index.js"
 }
