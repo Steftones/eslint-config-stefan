@@ -1,4 +1,3 @@
-/* eslint-disable max-len */
 /* eslint-disable no-console */
 const path = require('path');
 const fs = require('fs');
@@ -6,7 +5,6 @@ const fs = require('fs');
 const PACKAGE_PATH = path.join(__dirname, '../..');
 let hasGitPath = false;
 let pathToGitFolder = PACKAGE_PATH;
-let levelsDeep = 0;
 
 const writeFileCallback = (error, hookType) => {
   if (error) {
@@ -27,7 +25,6 @@ if (fs.existsSync(path.join(PACKAGE_PATH, '.git'))) {
 }
 
 while (!hasGitPath) {
-  levelsDeep += 1;
   pathToGitFolder = path.join(pathToGitFolder, '../');
   if (fs.existsSync(path.join(pathToGitFolder, '.git'))) {
     hasGitPath = true;
@@ -37,25 +34,20 @@ while (!hasGitPath) {
 // get relative path from git folder to PACKAGE_PATH
 const gitToPackagePath = path.relative(pathToGitFolder, PACKAGE_PATH).split('\\').join('/');
 
-// package prepare script
-const packagePrepareScript = levelsDeep === 0
-  ? 'npx husky install && npx eslint-config-stefan'
-  : `cd ${`${'../'.repeat(levelsDeep)}`} && npx husky install ${gitToPackagePath}/.husky && cd ./${gitToPackagePath} && npx eslint-config-stefan`;
+// edit the git config file
+fs.appendFileSync(path.join(pathToGitFolder, '.git/config'), `\n    hooksPath = ${gitToPackagePath && `${gitToPackagePath}/`}.husky\n`);
 
-// add a pre-commit hook
-const preCommitHook = `#!/usr/bin/env sh
+const hookBase = `#!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 cd ./${gitToPackagePath}
-npm run lint
 `;
+
+// add a pre-commit hook
+const preCommitHook = `${hookBase}npm run lint`;
 fs.writeFileSync(path.join(__dirname, '.husky/pre-commit'), preCommitHook, (error) => writeFileCallback(error, 'pre-commit'));
 
 // add commit-msg hook
-const commitMsgHook = `#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-cd ./${gitToPackagePath}
-npx commitlint --config ./commitlint.config.js --edit --color --help-url
-`;
+const commitMsgHook = `${hookBase}npx commitlint --config ./commitlint.config.js --edit --color --help-url`;
 fs.writeFileSync(path.join(__dirname, '.husky/commit-msg'), commitMsgHook, (error) => writeFileCallback(error, 'commit-msg'));
 
 // add linting scripts to project package, e.g. lint: "npm run lint ."
@@ -65,7 +57,6 @@ const projectPackageJsonOutput = {
   ...projectPackageJson,
   scripts: {
     ...projectPackageJson.scripts,
-    prepare: packagePrepareScript,
     lint: 'eslint . --color',
     'lint:fix': 'eslint . --fix',
   },
@@ -77,7 +68,18 @@ const projectPackageJsonOutput = {
 
 try {
   fs.writeFileSync(path.join(__dirname, '../../package.json'), JSON.stringify(projectPackageJsonOutput, null, 2));
-  console.log('success adding scripts to project package.json');
+  console.log('Success adding scripts to project package.json');
 } catch (error) {
-  console.error('failed adding scripts to project package.json');
+  console.error(error);
+}
+
+try {
+  fs.cpSync(path.join(__dirname, './.husky'), path.join(__dirname, '../../.husky'), { recursive: true });
+  console.log('Success adding husky files for commit hooks!');
+  fs.cpSync(path.join(__dirname, './commitlint.config.js'), path.join(__dirname, '../../commitlint.config.js'));
+  console.log('Success adding commitlint config file!');
+  fs.cpSync(path.join(__dirname, './tsconfig.json'), path.join(__dirname, '../../tsconfig.json'));
+  console.log('Success adding typescript config file!');
+} catch (error) {
+  console.error(error);
 }

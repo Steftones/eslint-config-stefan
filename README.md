@@ -1,17 +1,13 @@
 # eslint-config-stefan
 
-Sets up the following for your React project:
-* React linting rules
+Configures your React project:
+* React/TypeScript linting rules
 * Git commit linting rules
 * Git pre-commit hooks
-
-- Rules are based around modern standards and airbnb's rules
-- Works with TypeScript
 
 ## Install
 ```
 npm i eslint-config-stefan
-npm run prepare
 ```
 - Installation will add files/folders to your project and scripts to your `package.json`
 - If your project is not TypeScript based, delete `tsconfig.json`
