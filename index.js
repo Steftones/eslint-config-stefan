@@ -1,12 +1,15 @@
 const commonRules = {
-  'no-extra-parens': 'error', // enforces unnecessary parentheses e.g. const someMaths = (1 * 2);
-  'react/jsx-filename-extension': [ // only allows .jsx and .tsx files to contain jsx - forces you to rename .js component files to .jsx
+  'react/jsx-filename-extension': [
+    /* only allows .jsx and .tsx files to contain
+    jsx - forces you to rename .js component files to .jsx */
     'error',
     {
       extensions: ['.jsx', '.tsx'],
     },
   ],
-  'react/boolean-prop-naming': [ // TODO: only works for components with props defined by types, not for interfaces, but works for .jsx files
+  'react/boolean-prop-naming': [
+    /* TODO: only works for components with props defined by
+    types, not for interfaces, but works for .jsx files */
     'error',
     {
       propTypeNames: ['bool', 'mutuallyExclusiveTrueProps'],
@@ -25,7 +28,8 @@ const commonRules = {
   // 'no-magic-numbers': 'error', // magic numbers and strings can lead to mistakes
   'no-nested-ternary': 'error', // nested ternaries are hard to read
   complexity: 'error', // enforcing cyclomatic complexity of 11, as per airbnb's rules
-  'comma-dangle': [ // enforcing trailing commas
+  'comma-dangle': [
+    // enforcing trailing commas
     'error',
     {
       arrays: 'always-multiline',
@@ -35,10 +39,19 @@ const commonRules = {
       functions: 'never',
     },
   ],
-  'react/forbid-dom-props': [ // forbid inline styles in DOM elements
+  'react/forbid-dom-props': [
+    // forbid inline styles in DOM elements
     'error',
     {
       forbid: ['style'],
+    },
+  ],
+  'object-curly-newline': [
+    'error',
+    {
+      ObjectExpression: { consistent: true, multiline: true },
+      ObjectPattern: { consistent: true, multiline: true },
+      ExportDeclaration: { multiline: true, minProperties: 3 },
     },
   ],
 };
@@ -58,7 +71,7 @@ module.exports = {
     '*jest*',
     'setupTests.js',
   ],
-  extends: ['eslint-config-airbnb', 'plugin:react/recommended'],
+  extends: ['eslint-config-airbnb', 'plugin:react/recommended', 'prettier'],
   plugins: ['react', 'react-hooks'],
   overrides: [
     {
@@ -74,7 +87,8 @@ module.exports = {
           jsx: true,
         },
         requireConfigFile: false,
-        babelOptions: { // .babelrc not needed now
+        babelOptions: {
+          // .babelrc not needed now
           babelrc: false,
           configFile: false,
           presets: ['@babel/preset-env', '@babel/preset-react'],
@@ -94,7 +108,7 @@ module.exports = {
           jsx: true,
         },
       },
-      extends: ['airbnb-typescript', 'plugin:@typescript-eslint/recommended'],
+      extends: ['airbnb-typescript', 'plugin:@typescript-eslint/recommended', 'prettier'],
       plugins: ['@typescript-eslint'],
       rules: {
         ...commonRules,

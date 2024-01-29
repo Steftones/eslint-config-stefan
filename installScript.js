@@ -35,7 +35,10 @@ while (!hasGitPath) {
 const gitToPackagePath = path.relative(pathToGitFolder, PACKAGE_PATH).split('\\').join('/');
 
 // edit the git config file
-fs.appendFileSync(path.join(pathToGitFolder, '.git/config'), `\n    hooksPath = ${gitToPackagePath && `${gitToPackagePath}/`}.husky\n`);
+fs.appendFileSync(
+  path.join(pathToGitFolder, '.git/config'),
+  `\n    hooksPath = ${gitToPackagePath && `${gitToPackagePath}/`}.husky\n`
+);
 
 const hookBase = `#!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
@@ -43,15 +46,21 @@ cd ./${gitToPackagePath}
 `;
 
 // add a pre-commit hook
-const preCommitHook = `${hookBase}npm run lint`;
-fs.writeFileSync(path.join(__dirname, '.husky/pre-commit'), preCommitHook, (error) => writeFileCallback(error, 'pre-commit'));
+const preCommitHook = `${hookBase}npm run prettier:fix && npm run lint`;
+fs.writeFileSync(path.join(__dirname, '.husky/pre-commit'), preCommitHook, (error) =>
+  writeFileCallback(error, 'pre-commit')
+);
 
 // add commit-msg hook
 const commitMsgHook = `${hookBase}npx commitlint --config ./commitlint.config.js --edit --color --help-url`;
-fs.writeFileSync(path.join(__dirname, '.husky/commit-msg'), commitMsgHook, (error) => writeFileCallback(error, 'commit-msg'));
+fs.writeFileSync(path.join(__dirname, '.husky/commit-msg'), commitMsgHook, (error) =>
+  writeFileCallback(error, 'commit-msg')
+);
 
 // add linting scripts to project package, e.g. lint: "npm run lint ."
-const projectPackageJson = JSON.parse(fs.readFileSync(path.join(__dirname, '../../package.json'), 'utf8'));
+const projectPackageJson = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../../package.json'), 'utf8')
+);
 
 const projectPackageJsonOutput = {
   ...projectPackageJson,
@@ -59,6 +68,7 @@ const projectPackageJsonOutput = {
     ...projectPackageJson.scripts,
     lint: 'eslint . --color',
     'lint:fix': 'eslint . --fix',
+    'prettier:fix': 'prettier . --write',
   },
   eslintConfig: {
     ...projectPackageJson.eslintConfig,
@@ -67,19 +77,29 @@ const projectPackageJsonOutput = {
 };
 
 try {
-  fs.writeFileSync(path.join(__dirname, '../../package.json'), JSON.stringify(projectPackageJsonOutput, null, 2));
+  fs.writeFileSync(
+    path.join(__dirname, '../../package.json'),
+    JSON.stringify(projectPackageJsonOutput, null, 2)
+  );
   console.log('Success adding scripts to project package.json');
 } catch (error) {
   console.error(error);
 }
 
 try {
-  fs.cpSync(path.join(__dirname, './.husky'), path.join(__dirname, '../../.husky'), { recursive: true });
+  fs.cpSync(path.join(__dirname, './.husky'), path.join(__dirname, '../../.husky'), {
+    recursive: true,
+  });
   console.log('Success adding husky files for commit hooks!');
-  fs.cpSync(path.join(__dirname, './commitlint.config.js'), path.join(__dirname, '../../commitlint.config.js'));
+  fs.cpSync(
+    path.join(__dirname, './commitlint.config.js'),
+    path.join(__dirname, '../../commitlint.config.js')
+  );
   console.log('Success adding commitlint config file!');
   fs.cpSync(path.join(__dirname, './tsconfig.json'), path.join(__dirname, '../../tsconfig.json'));
   console.log('Success adding typescript config file!');
+  fs.cpSync(path.join(__dirname, './.prettierrc.json'), path.join(__dirname, '../../.prettierrc.json'));
+  console.log('Success adding prettier config file!');
 } catch (error) {
   console.error(error);
 }
