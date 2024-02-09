@@ -68,7 +68,6 @@ module.exports = {
     'out/',
     'dist/',
     'build/',
-    '*jest*',
     'setupTests.js',
   ],
   extends: ['eslint-config-airbnb', 'plugin:react/recommended', 'prettier'],
@@ -97,6 +96,20 @@ module.exports = {
       rules: {
         ...commonRules,
         'react/prop-types': 'error', // requires you to add propTypes in a js or jsx file
+      },
+    },
+    {
+      files: ['**/*.test.*'],
+      plugins: ['jest', 'jest-dom'],
+      extends: ['plugin:jest/recommended', 'plugin:jest-dom/recommended'],
+      rules: {
+        ...commonRules,
+        'react/jsx-props-no-spreading': 'off', // prop spreading is useful in React testing
+        'global-require': 'warn',
+        'jest/no-focused-tests': 'error',
+        'jest/no-disabled-tests': 'error',
+        'jest/no-large-snapshots': 'error',
+        'jest/no-identical-title': 'error',
       },
     },
     {
