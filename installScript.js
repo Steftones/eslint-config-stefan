@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 const path = require('path');
 const fs = require('fs');
+const { execSync } = require('child_process');
 
 const PACKAGE_PATH = path.join(__dirname, '../..');
 let hasGitPath = false;
@@ -35,10 +36,7 @@ while (!hasGitPath) {
 const gitToPackagePath = path.relative(pathToGitFolder, PACKAGE_PATH).split('\\').join('/');
 
 // edit the git config file
-fs.appendFileSync(
-  path.join(pathToGitFolder, '.git/config'),
-  `\n    hooksPath = ${gitToPackagePath && `${gitToPackagePath}/`}.husky\n`
-);
+execSync(`git config --local core.hooksPath ${gitToPackagePath && `${gitToPackagePath}/`}.husky`);
 
 const hookBase = `#!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
@@ -52,7 +50,7 @@ fs.writeFileSync(path.join(__dirname, '.husky/pre-commit'), preCommitHook, (erro
 );
 
 // add commit-msg hook
-const commitMsgHook = `${hookBase}npx commitlint --config ./commitlint.config.js --edit --color --help-url`;
+const commitMsgHook = `${hookBase}npx commitlint --config ./commitlint.config.cjs --edit --color --help-url`;
 fs.writeFileSync(path.join(__dirname, '.husky/commit-msg'), commitMsgHook, (error) =>
   writeFileCallback(error, 'commit-msg')
 );
@@ -92,8 +90,8 @@ try {
   });
   console.log('Success adding husky files for commit hooks!');
   fs.cpSync(
-    path.join(__dirname, './commitlint.config.js'),
-    path.join(__dirname, '../../commitlint.config.js')
+    path.join(__dirname, './commitlint.config.cjs'),
+    path.join(__dirname, '../../commitlint.config.cjs')
   );
   console.log('Success adding commitlint config file!');
   fs.cpSync(path.join(__dirname, './tsconfig.json'), path.join(__dirname, '../../tsconfig.json'));
