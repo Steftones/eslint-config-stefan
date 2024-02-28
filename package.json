@@ -1,6 +1,6 @@
 {
   "name": "eslint-config-stefan",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "Linting rules and git hooks",
   "scripts": {
     "postinstall": "node installScript.js",
