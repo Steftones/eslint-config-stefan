@@ -64,8 +64,8 @@ const projectPackageJsonOutput = {
   ...projectPackageJson,
   scripts: {
     ...projectPackageJson.scripts,
-    lint: 'eslint . --color',
-    'lint:fix': 'eslint . --fix',
+    lint: 'eslint . --color && npx stylelint **/*.{css,scss}',
+    'lint:fix': 'eslint . --fix && npx stylelint **/*.{css,scss} --fix',
     'prettier:fix': 'prettier . --write',
   },
   eslintConfig: {
@@ -94,9 +94,17 @@ try {
     path.join(__dirname, '../../commitlint.config.cjs')
   );
   console.log('Success adding commitlint config file!');
+  fs.cpSync(
+    path.join(__dirname, './stylelint.config.cjs'),
+    path.join(__dirname, '../../stylelint.config.cjs')
+  );
+  console.log('Success adding stylelint config file!');
   fs.cpSync(path.join(__dirname, './tsconfig.json'), path.join(__dirname, '../../tsconfig.json'));
   console.log('Success adding typescript config file!');
-  fs.cpSync(path.join(__dirname, './.prettierrc.json'), path.join(__dirname, '../../.prettierrc.json'));
+  fs.cpSync(
+    path.join(__dirname, './.prettierrc.json'),
+    path.join(__dirname, '../../.prettierrc.json')
+  );
   console.log('Success adding prettier config file!');
 } catch (error) {
   console.error(error);
