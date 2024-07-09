@@ -99,8 +99,8 @@ try {
     path.join(__dirname, '../../stylelint.config.cjs')
   );
   console.log('Success adding stylelint config file!');
-  fs.cpSync(path.join(__dirname, './tsconfig.json'), path.join(__dirname, '../../tsconfig.json'));
-  console.log('Success adding typescript config file!');
+  // fs.cpSync(path.join(__dirname, './tsconfig.json'), path.join(__dirname, '../../tsconfig.json'));
+  // console.log('Success adding typescript config file!');
   fs.cpSync(
     path.join(__dirname, './.prettierrc.json'),
     path.join(__dirname, '../../.prettierrc.json')
